@@ -1,0 +1,35 @@
+Date : 2021-05-03 22:17:27
+Directory : c:\Users\marti\Desktop\Platformer_v2
+Total : 11 files,  379 codes, 10 comments, 169 blanks, all 558 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Python   |         11 |        379 |         10 |        169 |        558 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                               | files      | code       | comment    | blank      | total      |
++----------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                  |         11 |        379 |         10 |        169 |        558 |
++----------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                           | language | code       | comment    | blank      | total      |
++----------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\marti\Desktop\Platformer_v2\Bullet.py     | Python   |         29 |          0 |         15 |         44 |
+| c:\Users\marti\Desktop\Platformer_v2\Camera.py     | Python   |         17 |          1 |          7 |         25 |
+| c:\Users\marti\Desktop\Platformer_v2\Cell.py       | Python   |         20 |          0 |          8 |         28 |
+| c:\Users\marti\Desktop\Platformer_v2\Display.py    | Python   |          4 |          0 |          1 |          5 |
+| c:\Users\marti\Desktop\Platformer_v2\Enemy.py      | Python   |         28 |          0 |         12 |         40 |
+| c:\Users\marti\Desktop\Platformer_v2\GameObject.py | Python   |         52 |          4 |         22 |         78 |
+| c:\Users\marti\Desktop\Platformer_v2\Main.py       | Python   |         43 |          0 |         17 |         60 |
+| c:\Users\marti\Desktop\Platformer_v2\Maze.py       | Python   |         82 |          4 |         51 |        137 |
+| c:\Users\marti\Desktop\Platformer_v2\Mediator.py   | Python   |         18 |          1 |          5 |         24 |
+| c:\Users\marti\Desktop\Platformer_v2\Particle.py   | Python   |          8 |          0 |          4 |         12 |
+| c:\Users\marti\Desktop\Platformer_v2\Player.py     | Python   |         78 |          0 |         27 |        105 |
+| Total                                              |          |        379 |         10 |        169 |        558 |
++----------------------------------------------------+----------+------------+------------+------------+------------+
