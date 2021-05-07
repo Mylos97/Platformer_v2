@@ -68,9 +68,10 @@ class Missile(GameObject):
         if self.img.get_alpha() == 0:
             self.remove()
 
-
-
     def draw(self, camera):
         if self.show_frames > 2: 
             Display.SCREEN.blit(self.roti_img, camera.apply_offset(self.rect))
 
+
+    def collision(self):
+        print("hrll")

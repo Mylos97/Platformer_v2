@@ -25,7 +25,6 @@ class GameObject:
         self.trail_limit = 5
         self.trail_images = 7
         self.hit_timer = 0
-        self.target = self.find_player()
 
     def loop(self, DT = None):
         pass
@@ -93,51 +92,6 @@ class GameObject:
         
         if self.accel[1] <= -self.top_speed:
             self.accel[1] = -self.top_speed
-
-
-
-
-
-    ## Only for checking collions on walls
-    def check_collision_walls(self, rect, movement):
-        collision_types = {'top': False, 'bottom': False , 'right': False, 'left': False}
-
-        ## Check for x direction ##
-        rect.x += movement[0]
-        hit_list = self.collision_walls(rect)
-
-        for wall in hit_list:
-            if movement[0] > 0:
-                rect.right = wall.left
-                collision_types['right'] = True
-            if movement[0] < 0:
-                rect.left = wall.right
-                collision_types['left'] = True
-        
-        ## Check for y direction ##
-        rect.y += movement[1]
-        hit_list = self.collision_walls(rect)
-        
-        for wall in hit_list:
-            if movement[1] > 0:
-                rect.bottom = wall.top
-                collision_types['bottom'] = True
-            if movement[1] < 0:
-                rect.top = wall.bottom
-                collision_types['top'] = True
-        
-        return rect, collision_types
-
-
-    ## Returns a list of rects that collide with the object
-    def collision_walls(self, rect):
-        hit_list = []
-
-        for wall in Mediator.CURRENT_WALLS:
-            if rect.colliderect(wall.get_rect()):
-                hit_list.append(wall.get_rect())
-        
-        return hit_list
     
     def find_target(self):
         for object in Mediator.ALL_GAMEOBJECTS:
@@ -146,7 +100,6 @@ class GameObject:
 
     def find_player(self):
         for object in Mediator.ALL_GAMEOBJECTS:
-            print(len(Mediator.ALL_GAMEOBJECTS))
             if object.get_id() == 'player':
                 print("i use")
                 return object

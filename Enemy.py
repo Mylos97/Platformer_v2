@@ -15,7 +15,7 @@ class Enemy(GameObject):
         self.img = pygame.image.load("Graphics/Enemy.png")
         self.img_copy = self.img.copy()
         self.target = self.find_player()
-        print(self.target.get_id())
+
         self.trail_images = 3
         self.trail_limit = 5
 

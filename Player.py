@@ -178,7 +178,6 @@ class Player(GameObject):
             angle = math.degrees(math.atan2(-dir[1], dir[0]))
             x_y = [self.rect.x,self.rect.y]
             Mediator.ALL_GAMEOBJECTS.append(Missile(copy.deepcopy(x_y), dir))
-            print("missile shot")
             
 
             
