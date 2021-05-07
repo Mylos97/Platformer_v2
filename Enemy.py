@@ -13,6 +13,11 @@ class Enemy(GameObject):
         self.rect = pygame.Rect(self.pos[0],self.pos[1],self.size[0],self.size[1])
         self.id = 'enemy'
         self.img = pygame.image.load("Graphics/Enemy.png")
+        self.img_copy = self.img.copy()
+
+        self.trail_images = 3
+        self.trail_limit = 5
+
     
     def loop(self, DT):
         self.vel[0] = self.accel[0]
@@ -51,9 +56,15 @@ class Enemy(GameObject):
             self.accel[0] = 0
             self.accel[1] = 0
 
+        if self.trail_counter > self.trail_limit:
+            self.trail_counter = 0 
+            self.append_trail(self.img_copy, self.rect.copy())
+
+        self.trail_counter += 1
         self.hit_timer += 1
 
     def draw(self,camera):
+        self.draw_trail(camera)
         Display.SCREEN.blit(self.img, (camera.apply_offset(self.rect)))
 
     def collision(self):

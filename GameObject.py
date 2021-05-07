@@ -19,7 +19,7 @@ class GameObject:
         self.trail_rect = []
         self.trail_counter = 0
         self.trail_limit = 5
-
+        self.trail_images = 7
         self.hit_timer = 0
 
     def loop(self, DT = None):
@@ -49,19 +49,19 @@ class GameObject:
     def append_trail(self, img, rect):
         self.trail_img.insert(0, img)
         self.trail_rect.insert(0, rect)
-        if len(self.trail_img) > 7:
-            self.trail_img.pop(7)
-            self.trail_rect.pop(7)
+        if len(self.trail_img) > self.trail_images:
+            self.trail_img.pop(self.trail_images)
+            self.trail_rect.pop(self.trail_images)
     
     def draw_trail(self, camera):
-        alpha = 160
+        alpha = 140
         i = 0
 
         for img in self.trail_img:
             img.set_alpha(alpha)
             Display.SCREEN.blit(img, camera.apply_offset(self.trail_rect[i]))
             i += 1
-            alpha -= 30
+            alpha -= (140/self.trail_images)
             
 
 

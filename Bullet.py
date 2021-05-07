@@ -10,10 +10,9 @@ class Bullet(GameObject):
         self.pos[1] += 4
         self.size = [8,8]
         self.lifetime = 120
-        self.timer = 0
         self.vel = [int(dir[0]*6), int(dir[1]*6)]
         self.bullet_type = bullet_type
-
+        self.timer = 0
 
         self.rect = pygame.Rect(self.pos[0],self.pos[1],self.size[0],self.size[1])
         self.id = 'player_bullet'
@@ -32,9 +31,10 @@ class Bullet(GameObject):
         if collisions['top'] or collisions['bottom'] or collisions['right'] or collisions['left']:
             self.remove()
         
-        self.timer += 1
         self.wait_frames += 1
-        if self.timer > self.lifetime:
+        self.timer += 1
+
+        if self.img.get_alpha() == 0:
             self.remove()
 
     def draw(self, camera):

@@ -20,7 +20,7 @@ class Bomb(GameObject):
     def loop(self, DT):
         self.life_time += 1
 
-        self.img.set_alpha(255-int(self.life_time**1.05))
+        self.img.set_alpha(255-int(self.life_time**1.12))
 
         if self.img.get_alpha() == 0:
             self.bomb_explode()
