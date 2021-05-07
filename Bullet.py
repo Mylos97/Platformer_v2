@@ -23,13 +23,13 @@ class Bullet(GameObject):
 
  
     def loop(self, DT):
-        collisions = {'top': False, 'bottom': False, 'right': False, 'left': False}
-
         self.img.set_alpha(int(255 - math.pow(self.timer,1.2)))
-        self.rect, collisions = self.check_collision_walls(self.rect, self.vel)
 
-        if collisions['top'] or collisions['bottom'] or collisions['right'] or collisions['left']:
-            self.remove()
+        self.pos[0] += self.vel[0]
+        self.pos[1] += self.vel[1]
+
+        self.rect.x = self.pos[0]
+        self.rect.y = self.pos[1]
         
         self.wait_frames += 1
         self.timer += 1

@@ -1,3 +1,5 @@
+import pygame, math
+
 from Display import *
 from Mediator import *
 
@@ -8,6 +10,8 @@ class GameObject:
         self.pos = pos
         self.vel = [0,0]
         self.accel = [0,0]
+        self.top_speed = 3
+
         self.rect = pygame.Rect(0,0,0,0)
         self.id = None
 
@@ -21,6 +25,7 @@ class GameObject:
         self.trail_limit = 5
         self.trail_images = 7
         self.hit_timer = 0
+        self.target = self.find_player()
 
     def loop(self, DT = None):
         pass
@@ -68,15 +73,26 @@ class GameObject:
             self.pos[0] = Display.GAME_SIZE[0]
         
         if self.pos[0] < 0:
-            self.pos[0]
+            self.pos[0] = 0
         
         if self.pos[1] > Display.GAME_SIZE[1]:
-            self.pos[1] = Dispay.GameObject[1]
+            self.pos[1] = Display.GAME_SIZE[1]
     
         if self.pos[1] < 0:
             self.pos[1] = 0
 
+    def cap_acceleration(self):
+        if self.accel[0] >= self.top_speed:
+            self.accel[0] = self.top_speed
+        
+        if self.accel[0] <= -self.top_speed:
+            self.accel[0] = -self.top_speed
 
+        if self.accel[1] >= self.top_speed:
+            self.accel[1] = self.top_speed
+        
+        if self.accel[1] <= -self.top_speed:
+            self.accel[1] = -self.top_speed
 
 
 
@@ -122,3 +138,27 @@ class GameObject:
                 hit_list.append(wall.get_rect())
         
         return hit_list
+    
+    def find_target(self):
+        for object in Mediator.ALL_GAMEOBJECTS:
+            if object.get_id() == 'enemy':
+                return object
+
+    def find_player(self):
+        for object in Mediator.ALL_GAMEOBJECTS:
+            print(len(Mediator.ALL_GAMEOBJECTS))
+            if object.get_id() == 'player':
+                print("i use")
+                return object
+
+    def follow_object(self, object):
+        self.x_d = self.rect.centerx - object.rect.centerx
+        self.y_d = self.rect.centery - object.rect.centery
+
+        self.distance = math.sqrt(math.pow(self.x_d, 2) + math.pow(self.y_d, 2))
+        self.x_n = (self.x_d/self.distance)
+        self.y_n = (self.y_d/self.distance)
+
+        self.accel[0] -= self.x_n
+        self.accel[1] -= self.y_n
+        

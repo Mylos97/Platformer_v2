@@ -18,18 +18,18 @@ class Main:
         DT = 0
         FPS_COUNTER = 0
         player = Player([100, 100])
-        enemy = Enemy([200, 400])
         camera = Camera(1024*16, 768*16)
         cell = Cell(20, 0)
         maze = Maze()
         Mediator.ALL_GAMEOBJECTS.append(player)
+        enemy = Enemy([200, 400])
         Mediator.ALL_GAMEOBJECTS.append(enemy)
         Mediator.ALL_WALLS.append(cell)
 
         while RUNNING:
-            Display.SCREEN.fill((242, 242, 242))
+            Display.SCREEN.fill((200, 200, 200))
             camera.update_offset(player.get_rect())
-
+            pygame.draw.rect(Display.SCREEN, (238,238,238), camera.apply_offset(Display.PLATFORM_RECT))
             DT = CLOCK.tick(FPS)
 
             for object in Mediator.ALL_GAMEOBJECTS:

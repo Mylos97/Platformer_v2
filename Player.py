@@ -4,11 +4,12 @@ from Display import *
 from Bullet import *
 from Mediator import *
 from Bomb import *
-
+from Missile import *
 
 class Player(GameObject):
     
     PLAYER_RECT = pygame.Rect(0,0,0,0)
+    PLAYER_SIZE = (16,16)
     FPS_COUNTER = 0
 
     def __init__(self,pos):
@@ -17,13 +18,14 @@ class Player(GameObject):
         self.accel_speed = 0.35
         self.top_speed = 9
         self.rect = pygame.Rect(self.pos[0],self.pos[1],self.size[0],self.size[1])
-        self.bullet_timer = 0
         self.id = 'player'
         self.img = pygame.image.load("Graphics/Player.png")
         self.img_copy = self.img.copy()
+        
         self.bomb_timer = 0
-
-
+        self.bullet_timer = 0
+        self.missile_timer = 0
+        self.missile_cooldown = 10
 
     def loop(self, DT):
         Player.FPS_COUNTER += 1
@@ -50,6 +52,7 @@ class Player(GameObject):
 
         self.bullet_timer += 1
         self.bomb_timer += 1
+        self.missile_timer += 1
 
         self.check_border()
 
@@ -159,6 +162,24 @@ class Player(GameObject):
             angle = math.degrees(math.atan2(-dir[1],dir[0]))
             x_y = [self.rect.x,self.rect.y]
             Mediator.ALL_GAMEOBJECTS.append(Bullet(copy.deepcopy(x_y), dir))
+
+        if pygame.mouse.get_pressed(num_buttons=3)[2] and self.missile_cooldown < self.missile_timer:
+            self.missile_timer = 0
+            mx, my = pygame.mouse.get_pos()
+            dir = (mx - Display.WINDOW_SIZE[0]/2, my - Display.WINDOW_SIZE[1]/2)
+            length = math.hypot(*dir)
+
+            if length == 0.0:
+                print("length 0.0")
+                dir = (0,1)
+            else:
+                dir = (dir[0]/length, dir[1]/length)
+
+            angle = math.degrees(math.atan2(-dir[1], dir[0]))
+            x_y = [self.rect.x,self.rect.y]
+            Mediator.ALL_GAMEOBJECTS.append(Missile(copy.deepcopy(x_y), dir))
+            print("missile shot")
+            
 
             
     def collision(self):
