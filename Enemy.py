@@ -26,7 +26,10 @@ class Enemy(GameObject):
         self.pos[0] += 17*self.vel[0]/DT
         self.pos[1] += 17*self.vel[1]/DT
         
-        self.rect = pygame.Rect(self.pos[0],self.pos[1],self.size[0],self.size[1])
+        #self.rect = pygame.Rect(self.pos[0],self.pos[1],self.size[0],self.size[1])
+        self.rect.x = self.pos[0]
+        self.rect.y = self.pos[1]
+
 
         self.x_d = self.rect.centerx - Player.PLAYER_RECT.centerx
         self.y_d = self.rect.centery - Player.PLAYER_RECT.centery

@@ -8,7 +8,7 @@ class GameObject:
         self.pos = pos
         self.vel = [0,0]
         self.accel = [0,0]
-        self.rect = None
+        self.rect = pygame.Rect(0,0,0,0)
         self.id = None
 
 
@@ -63,6 +63,22 @@ class GameObject:
             i += 1
             alpha -= (140/self.trail_images)
             
+    def check_border(self):
+        if self.pos[0] > Display.GAME_SIZE[0]:
+            self.pos[0] = Display.GAME_SIZE[0]
+        
+        if self.pos[0] < 0:
+            self.pos[0]
+        
+        if self.pos[1] > Display.GAME_SIZE[1]:
+            self.pos[1] = Dispay.GameObject[1]
+    
+        if self.pos[1] < 0:
+            self.pos[1] = 0
+
+
+
+
 
 
 

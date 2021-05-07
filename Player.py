@@ -27,17 +27,21 @@ class Player(GameObject):
 
     def loop(self, DT):
         Player.FPS_COUNTER += 1
+        
         self.key_input()
         self.mouse_input()
         
-        collisions = {'top': False, 'bottom': False, 'right': False, 'left': False}
-
         self.vel[0] = 17*self.vel[0]/DT
         self.vel[1] = 17*self.vel[1]/DT
+        
+        self.pos[0] += self.vel[0]
+        self.pos[1] += self.vel[1]
 
-        self.rect , collisions = self.check_collision_walls(self.rect, self.vel)
+        self.rect.x = self.pos[0]
+        self.rect.y = self.pos[1]
 
         Player.PLAYER_RECT = pygame.Rect.copy(self.rect)
+
         self.trail_counter += 1
 
         if self.trail_counter > self.trail_limit:
@@ -46,6 +50,8 @@ class Player(GameObject):
 
         self.bullet_timer += 1
         self.bomb_timer += 1
+
+        self.check_border()
 
 
     def draw(self, camera):
