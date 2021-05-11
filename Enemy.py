@@ -57,10 +57,14 @@ class Enemy(GameObject):
     def collision(self):
         if self.collision_id == 'player_bullet' and self.hit_timer > 3:
             self.hit_timer = 0
-            print(Player.FPS_COUNTER)
-            print(self.collision_vel)
             self.accel[0] += self.collision_vel[0]*2
             self.accel[1] += self.collision_vel[1]*2
+            self.collision_vel.clear()
+        
+        if self.collision_id == 'missile' and self.hit_timer > 3:
+            self.hit_timer = 0
+            self.accel[0] += self.collision_vel[0]*3
+            self.accel[1] += self.collision_vel[1]*3
             self.collision_vel.clear()
         
         

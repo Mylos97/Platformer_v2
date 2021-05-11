@@ -14,11 +14,12 @@ class Bullet(GameObject):
         self.bullet_type = bullet_type
         self.timer = 0
 
-        self.rect = pygame.Rect(self.pos[0],self.pos[1],self.size[0],self.size[1])
         self.id = 'player_bullet'
         self.img = pygame.image.load("Graphics/Bullet.png")
         self.wait_frames = 0
+        self.rect = pygame.Rect(-99999,-99999,self.img.get_width(),self.img.get_height())
 
+        self.rotate_int = 0
         self.update_image()
 
  
@@ -28,18 +29,34 @@ class Bullet(GameObject):
         self.pos[0] += self.vel[0]
         self.pos[1] += self.vel[1]
 
-        self.rect.x = self.pos[0]
-        self.rect.y = self.pos[1]
+        if self.wait_frames > 2:
+            self.rect.x = self.pos[0]
+            self.rect.y = self.pos[1]
         
         self.wait_frames += 1
         self.timer += 1
 
         if self.img.get_alpha() == 0:
             self.remove()
+        
+        if self.bullet_type == 'missile_bullet_red' and self.timer%20 == 0:
+            self.img_roti = pygame.transform.rotate(self.img, self.rotate_int)
+            self.rect = self.img_roti.get_rect(center=(self.pos))            
+            self.rotate_int += 10
+
+            if self.rotate_int > 360:
+                
+                self.rotate_int = 0
 
     def draw(self, camera):
         if self.wait_frames > 2:
-            Display.SCREEN.blit(self.img,camera.apply_offset(self.rect))
+            if self.bullet_type == 'missile_bullet_red':
+                Display.SCREEN.blit(self.img_roti, camera.apply_offset(self.rect))
+
+            else:
+                Display.SCREEN.blit(self.img,camera.apply_offset(self.rect))
+
+
 
     def collision(self):
         print(self.collision_id)
@@ -51,6 +68,20 @@ class Bullet(GameObject):
 
     def update_image(self):
         if self.bullet_type == 'bomb_bullet_orange':
+
             self.img = pygame.image.load("Graphics/Bullet_Orange.png")
+            self.rect = pygame.Rect(-99999,-99999,self.img.get_width(),self.img.get_height())
+
+        elif self.bullet_type == 'missile_bullet_red':
+
+            self.img = pygame.image.load("Graphics/Bullet_Yellow.png")
+            self.img_roti = self.img.copy()
+
+            self.vel[0] = (self.vel[0]/6)*4
+            self.vel[1] = (self.vel[1]/6)*4
+            self.timer += 35
+            self.rect = pygame.Rect(-99999,-99999,self.img.get_width(),self.img.get_height())
+
+
 
 

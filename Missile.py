@@ -2,15 +2,18 @@ import pygame, math
 
 from GameObject import *
 from Display import *
+from Mediator import *
+from Bullet import *
 
 class Missile(GameObject):
 
     def __init__(self, pos, dir ):
         super().__init__(pos)
-        self.pos[0] += 4
-        self.pos[1] += 4
+        self.pos[0] += 8
+        self.pos[1] += 8
         self.vel = [dir[0]*3,dir[1]*3]
         self.accel = [dir[0]*3,dir[1]*3]
+        self.id = 'missile'
 
         self.life_time = 0
         self.img = pygame.image.load("Graphics\Missile.png")
@@ -19,7 +22,7 @@ class Missile(GameObject):
         angle = math.degrees(math.atan2(-dir[1], dir[0])) + 90 
         self.roti_img = pygame.transform.rotate(self.img, angle)
 
-        self.rect = pygame.Rect(self.pos[0], self.pos[1], self.img.get_width(), self.img.get_height())
+        self.rect = pygame.Rect(-99999, -999999, self.img.get_width(), self.img.get_height())
         
         self.target = self.find_target()
         
@@ -38,8 +41,9 @@ class Missile(GameObject):
         self.pos[0] += self.vel[0]
         self.pos[1] += self.vel[1]
 
-        self.rect.x = self.pos[0]
-        self.rect.y = self.pos[1]
+        if self.show_frames > 5:
+            self.rect.x = self.pos[0]
+            self.rect.y = self.pos[1]
 
 
         self.cap_acceleration()
@@ -66,12 +70,23 @@ class Missile(GameObject):
 
 
         if self.img.get_alpha() == 0:
+            self.explode()
             self.remove()
 
     def draw(self, camera):
-        if self.show_frames > 2: 
+        if self.show_frames > 5: 
             Display.SCREEN.blit(self.roti_img, camera.apply_offset(self.rect))
 
 
     def collision(self):
-        print("hrll")
+        if self.collision_id == 'enemy':
+            self.explode()
+            self.remove()
+
+        
+        self.collision_id = 'none'
+
+    def explode(self):
+        angles = [[0,1],[1,0],[0,-1],[-1,0]]
+        for angle in angles:
+            Mediator.ALL_GAMEOBJECTS.append(Bullet(self.pos.copy(), angle, "missile_bullet_red"))

@@ -6,11 +6,13 @@ class Mediator:
     CURRENT_WALLS = []
 
     def collisions(self):
+
         for g_object in Mediator.ALL_GAMEOBJECTS:            
             for g2_object in Mediator.ALL_GAMEOBJECTS:
 
                 if not g_object.get_id() == g2_object.get_id() :
-                    if not g_object.get_id() == 'player' and g2_object.get_id() == 'player_bullet':
+
+                    #if not g_object.get_id() == 'player' and g2_object.get_id() == 'player_bullet':
 
                         if g_object.get_rect().colliderect(g2_object.get_rect()):
                             #print("i " + str(g_object.get_id()) + " collide with " + str(g2_object.get_id()))
