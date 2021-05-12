@@ -26,6 +26,12 @@ class GameObject:
         self.trail_images = 7
         self.hit_timer = 0
 
+        self.hitpoints = 1
+        self.start_hitpoints = self.hitpoints
+
+        self.healt_bar = pygame.Rect(self.pos[0], self.pos[1], 20, 2)
+        self.healt_bar_img = pygame.Surface((self.healt_bar.w,self.healt_bar.h))
+
     def loop(self, DT = None):
         pass
     
@@ -97,11 +103,12 @@ class GameObject:
         for object in Mediator.ALL_GAMEOBJECTS:
             if object.get_id() == 'enemy':
                 return object
+        
+        return 'none'
 
     def find_player(self):
         for object in Mediator.ALL_GAMEOBJECTS:
             if object.get_id() == 'player':
-                print("i use")
                 return object
 
     def follow_object(self, object):
@@ -114,3 +121,18 @@ class GameObject:
 
         self.accel[0] -= self.x_n
         self.accel[1] -= self.y_n
+    
+    def update_healhbar(self):
+
+        self.healt_bar.w = (self.hitpoints*self.start_hitpoints)/self.start_hitpoints
+        self.healt_bar.x = self.pos[0] + self.img.get_width() / 4
+        self.healt_bar.y = self.pos[1] - 8
+
+        self.healt_bar_img = pygame.Surface((self.healt_bar.w, self.healt_bar.h))
+        self.healt_bar_img.fill((0,255,0))
+
+
+
+    def draw_healtbar(self, camera): 
+        self.update_healhbar()
+        Display.SCREEN.blit(self.healt_bar_img, camera.apply_offset(self.healt_bar))

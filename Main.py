@@ -46,7 +46,6 @@ class Main:
             Mediator.ALL_GAMEOBJECTS = [object for object in Mediator.ALL_GAMEOBJECTS if object not in Mediator.TO_BE_REMOVED]
             Mediator.TO_BE_REMOVED.clear()
 
-
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
                     pygame.quit()

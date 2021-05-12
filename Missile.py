@@ -51,14 +51,15 @@ class Missile(GameObject):
         ## wait some time before finding enemy
         if self.life_time > 30 and self.update_speed > 10:
             self.update_speed = 0
-            self.follow_object(self.target)
+            if not self.target == 'none':
+                self.follow_object(self.target)
 
-            angle = math.degrees(math.atan2(self.target.rect.y - self.rect.y, self.target.rect.x - self.rect.x))
-            
-            ## Make top 0 and get rid of -
-            angle = abs(angle - 90) 
+                angle = math.degrees(math.atan2(self.target.rect.y - self.rect.y, self.target.rect.x - self.rect.x))
+                
+                ## Make top 0 and get rid of -
+                angle = abs(angle - 90) 
 
-            self.roti_img = pygame.transform.rotate(self.img, angle)
+                self.roti_img = pygame.transform.rotate(self.img, angle)
 
 
         ## update rect so the image does not move 

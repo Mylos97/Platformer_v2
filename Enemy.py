@@ -20,6 +20,8 @@ class Enemy(GameObject):
 
         self.trail_images = 3
         self.trail_limit = 5
+        self.hitpoints = 10
+
 
     
     def loop(self, DT):
@@ -52,15 +54,21 @@ class Enemy(GameObject):
         
         self.check_border()
 
+        if self.hitpoints <= 0:
+            self.remove()
+
     def draw(self,camera):
         self.draw_trail(camera)
+        self.draw_healtbar(camera)
         Display.SCREEN.blit(self.img, (camera.apply_offset(self.rect)))
 
     def collision(self):
         if self.collision_id == 'player_bullet':
             self.hit_timer = 0
+            self.hitpoints -= 1
             self.accel[0] += self.collision_vel[0]*3
             self.accel[1] += self.collision_vel[1]*3
+            print(self.hitpoints)
             self.collision_vel.clear()
         
         if self.collision_id == 'missile':

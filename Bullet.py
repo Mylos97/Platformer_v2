@@ -40,6 +40,10 @@ class Bullet(GameObject):
 
         if self.img.get_alpha() == 0:
             self.remove()
+
+        if self.bullet_type == 'missile_bullet_red':
+            self.vel[0] *= 0.98
+            self.vel[1] *= 0.98
         
 
     def draw(self, camera):
@@ -49,8 +53,6 @@ class Bullet(GameObject):
 
 
     def collision(self):
-        print(self.collision_id)
-
         if self.collision_id == 'enemy':
             for i in range (random.randint(3,7)):
                 Mediator.ALL_GAMEOBJECTS.append(Particle(self.pos.copy(),self.vel.copy(),'test'))
