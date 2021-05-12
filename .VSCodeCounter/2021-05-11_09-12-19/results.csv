@@ -1,0 +1,15 @@
+"filename", "language", "Python", "comment", "blank", "total"
+"c:\Users\marti\Desktop\Platformer_v2\Bomb.py", "Python", 31, 0, 16, 47
+"c:\Users\marti\Desktop\Platformer_v2\Bullet.py", "Python", 58, 0, 30, 88
+"c:\Users\marti\Desktop\Platformer_v2\Camera.py", "Python", 13, 5, 7, 25
+"c:\Users\marti\Desktop\Platformer_v2\Cell.py", "Python", 20, 0, 8, 28
+"c:\Users\marti\Desktop\Platformer_v2\Display.py", "Python", 6, 0, 1, 7
+"c:\Users\marti\Desktop\Platformer_v2\Enemy.py", "Python", 52, 0, 20, 72
+"c:\Users\marti\Desktop\Platformer_v2\GameObject.py", "Python", 85, 0, 33, 118
+"c:\Users\marti\Desktop\Platformer_v2\Main.py", "Python", 45, 0, 16, 61
+"c:\Users\marti\Desktop\Platformer_v2\Maze.py", "Python", 82, 4, 51, 137
+"c:\Users\marti\Desktop\Platformer_v2\Mediator.py", "Python", 22, 2, 8, 32
+"c:\Users\marti\Desktop\Platformer_v2\Missile.py", "Python", 58, 3, 32, 93
+"c:\Users\marti\Desktop\Platformer_v2\Particle.py", "Python", 8, 0, 4, 12
+"c:\Users\marti\Desktop\Platformer_v2\Player.py", "Python", 128, 0, 57, 185
+"Total", "-", 608, 14, 283, 905

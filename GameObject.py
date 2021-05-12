@@ -114,4 +114,3 @@ class GameObject:
 
         self.accel[0] -= self.x_n
         self.accel[1] -= self.y_n
-        

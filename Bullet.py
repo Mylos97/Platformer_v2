@@ -1,6 +1,8 @@
 import pygame, math
 from GameObject import *
+from Particle import *
 from Display import *
+from Mediator import *
 
 class Bullet(GameObject):
 
@@ -39,21 +41,9 @@ class Bullet(GameObject):
         if self.img.get_alpha() == 0:
             self.remove()
         
-        if self.bullet_type == 'missile_bullet_red' and self.timer%20 == 0:
-            self.img_roti = pygame.transform.rotate(self.img, self.rotate_int)
-            self.rect = self.img_roti.get_rect(center=(self.pos))            
-            self.rotate_int += 10
-
-            if self.rotate_int > 360:
-                
-                self.rotate_int = 0
 
     def draw(self, camera):
         if self.wait_frames > 2:
-            if self.bullet_type == 'missile_bullet_red':
-                Display.SCREEN.blit(self.img_roti, camera.apply_offset(self.rect))
-
-            else:
                 Display.SCREEN.blit(self.img,camera.apply_offset(self.rect))
 
 
@@ -62,6 +52,8 @@ class Bullet(GameObject):
         print(self.collision_id)
 
         if self.collision_id == 'enemy':
+            for i in range (random.randint(3,7)):
+                Mediator.ALL_GAMEOBJECTS.append(Particle(self.pos.copy(),self.vel.copy(),'test'))
             self.remove()
         
         self.collision_id = 'none'
@@ -75,7 +67,6 @@ class Bullet(GameObject):
         elif self.bullet_type == 'missile_bullet_red':
 
             self.img = pygame.image.load("Graphics/Bullet_Yellow.png")
-            self.img_roti = self.img.copy()
 
             self.vel[0] = (self.vel[0]/6)*4
             self.vel[1] = (self.vel[1]/6)*4

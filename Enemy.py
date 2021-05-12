@@ -10,11 +10,13 @@ class Enemy(GameObject):
         super().__init__(pos)
         self.size = [32,32]
         self.top_speed = 2
-        self.rect = pygame.Rect(self.pos[0],self.pos[1],self.size[0],self.size[1])
         self.id = 'enemy'
-        self.img = pygame.image.load("Graphics/Enemy.png")
+        self.img = pygame.image.load("Graphics/Enemy_big.png")
         self.img_copy = self.img.copy()
         self.target = self.find_player()
+
+
+        self.rect = pygame.Rect(self.pos[0],self.pos[1],self.img.get_width(),self.img.get_height())
 
         self.trail_images = 3
         self.trail_limit = 5
@@ -55,16 +57,16 @@ class Enemy(GameObject):
         Display.SCREEN.blit(self.img, (camera.apply_offset(self.rect)))
 
     def collision(self):
-        if self.collision_id == 'player_bullet' and self.hit_timer > 3:
-            self.hit_timer = 0
-            self.accel[0] += self.collision_vel[0]*2
-            self.accel[1] += self.collision_vel[1]*2
-            self.collision_vel.clear()
-        
-        if self.collision_id == 'missile' and self.hit_timer > 3:
+        if self.collision_id == 'player_bullet':
             self.hit_timer = 0
             self.accel[0] += self.collision_vel[0]*3
             self.accel[1] += self.collision_vel[1]*3
+            self.collision_vel.clear()
+        
+        if self.collision_id == 'missile':
+            self.hit_timer = 0
+            self.accel[0] += self.collision_vel[0]*4
+            self.accel[1] += self.collision_vel[1]*4
             self.collision_vel.clear()
         
         
