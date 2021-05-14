@@ -2,7 +2,7 @@ import pygame, math
 from GameObject import *
 from Display import *
 from Player import *
-from Main import *
+from Bullet import *
 
 class Enemy(GameObject):
 
@@ -20,7 +20,12 @@ class Enemy(GameObject):
 
         self.trail_images = 3
         self.trail_limit = 5
-        self.hitpoints = 10
+        self.hitpoints = 100
+        self.start_hitpoints = 100
+
+        self.timer = 0
+        self.shoot_coldown = 60
+
 
 
     
@@ -34,7 +39,7 @@ class Enemy(GameObject):
         self.rect.x = self.pos[0]
         self.rect.y = self.pos[1]
 
-        self.follow_object(self.target)
+        self.follow_object_enemy(self.target)
 
 
         self.cap_acceleration()
@@ -45,13 +50,28 @@ class Enemy(GameObject):
             self.accel[0] = 0
             self.accel[1] = 0
 
+        if self.timer > self.shoot_coldown:
+            self.timer = 0
+            new_pos = [self.pos[0] + self.img.get_width()/4, self.pos[1] + self.img.get_height()/4]
+            dir = self.shoot_towards_object(self.target)
+            bullets = [[1,0],[0.1, - 0.5]]
+            #[dir[0]*math.cos(320) - dir[1]*math.sin(320), dir[0] * math.sin(320) + dir[1] * math.cos(320)]
+            Mediator.ALL_GAMEOBJECTS.append(Bullet(new_pos,bullets[0],"enemy_bullet"))
+            
+            Mediator.ALL_GAMEOBJECTS.append(Bullet(new_pos,bullets[1],"enemy_bullet"))
+
+
+
         if self.trail_counter > self.trail_limit:
             self.trail_counter = 0 
             self.append_trail(self.img_copy, self.rect.copy())
 
         self.trail_counter += 1
         self.hit_timer += 1
-        
+        self.timer += 1 
+
+
+
         self.check_border()
 
         if self.hitpoints <= 0:
@@ -63,19 +83,21 @@ class Enemy(GameObject):
         Display.SCREEN.blit(self.img, (camera.apply_offset(self.rect)))
 
     def collision(self):
-        if self.collision_id == 'player_bullet':
-            self.hit_timer = 0
-            self.hitpoints -= 1
-            self.accel[0] += self.collision_vel[0]*3
-            self.accel[1] += self.collision_vel[1]*3
-            print(self.hitpoints)
-            self.collision_vel.clear()
-        
-        if self.collision_id == 'missile':
-            self.hit_timer = 0
-            self.accel[0] += self.collision_vel[0]*4
-            self.accel[1] += self.collision_vel[1]*4
-            self.collision_vel.clear()
-        
-        
-        self.collision_id = 'none'
+        i = 0
+        for collision in self.collision_ids:
+            if collision == 'player_bullet':
+                self.hit_timer = 0
+                self.hitpoints -= 1
+                self.accel[0] += self.collision_vels[i][0]
+                self.accel[1] += self.collision_vels[i][1]
+
+            
+            if collision == 'missile':
+                self.hit_timer = 0
+                self.accel[0] += self.collision_vels[i][0]
+                self.accel[1] += self.collision_vels[i][1]
+            
+            i += 1
+            
+        self.collision_vels.clear()
+        self.collision_ids.clear()

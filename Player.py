@@ -161,7 +161,7 @@ class Player(GameObject):
             
             angle = math.degrees(math.atan2(-dir[1],dir[0]))
             x_y = [self.rect.x,self.rect.y]
-            Mediator.ALL_GAMEOBJECTS.append(Bullet(copy.deepcopy(x_y), dir))
+            Mediator.ALL_GAMEOBJECTS.append(Bullet(copy.deepcopy(x_y), dir, "player_bullet"))
 
         if pygame.mouse.get_pressed(num_buttons=3)[2] and self.missile_cooldown < self.missile_timer:
             self.missile_timer = 0
@@ -182,4 +182,7 @@ class Player(GameObject):
 
             
     def collision(self):
-        pass
+        for collision in self.collision_ids:
+            pass
+        
+        self.collision_ids.clear()

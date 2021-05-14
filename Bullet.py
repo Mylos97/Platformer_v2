@@ -15,14 +15,16 @@ class Bullet(GameObject):
         self.vel = [int(dir[0]*6), int(dir[1]*6)]
         self.bullet_type = bullet_type
         self.timer = 0
-
-        self.id = 'player_bullet'
+        self.id = bullet_type
         self.img = pygame.image.load("Graphics/Bullet.png")
         self.wait_frames = 0
-        self.rect = pygame.Rect(-99999,-99999,self.img.get_width(),self.img.get_height())
+        self.show_frames = 3
 
+        self.rect = pygame.Rect(-99999,-99999,self.img.get_width(),self.img.get_height())
+        
         self.rotate_int = 0
         self.update_image()
+        print(self.vel)
 
  
     def loop(self, DT):
@@ -47,24 +49,39 @@ class Bullet(GameObject):
         
 
     def draw(self, camera):
-        if self.wait_frames > 2:
+        if self.wait_frames > self.show_frames:
                 Display.SCREEN.blit(self.img,camera.apply_offset(self.rect))
 
 
 
     def collision(self):
-        if self.collision_id == 'enemy':
-            for i in range (random.randint(3,7)):
-                Mediator.ALL_GAMEOBJECTS.append(Particle(self.pos.copy(),self.vel.copy(),'test'))
-            self.remove()
-        
-        self.collision_id = 'none'
+
+        for collision in self.collision_ids:
+            if collision == 'enemy' and not self.bullet_type == 'enemy_bullet':
+                if len(Mediator.PARTICLES) < 25:
+                    for i in range (random.randint(3,6)):
+                        Mediator.PARTICLES.append(Particle(self.pos.copy(),self.vel.copy(),'test'))
+                self.remove()
+            
+            if collision == 'player' and not self.bullet_type == 'player_bullet':
+                self.remove()
+            
+        self.collision_ids.clear()
 
     def update_image(self):
         if self.bullet_type == 'bomb_bullet_orange':
 
             self.img = pygame.image.load("Graphics/Bullet_Orange.png")
             self.rect = pygame.Rect(-99999,-99999,self.img.get_width(),self.img.get_height())
+        
+        elif self.bullet_type == 'enemy_bullet':
+            self.img = pygame.image.load("Graphics/Enemy_Bullet_Brown.png")
+            self.vel[0] = (self.vel[0]/6)*3 
+            self.vel[1] = (self.vel[1]/6)*3
+            self.rect = pygame.Rect(-99999,-99999,self.img.get_width(),self.img.get_height())
+            self.show_frames = 8
+
+
 
         elif self.bullet_type == 'missile_bullet_red':
 

@@ -2,6 +2,8 @@ class Mediator:
     ALL_GAMEOBJECTS = []
     TO_BE_REMOVED = []
     COLLISIONS = []
+    PARTICLES = []
+    PARTICLES_REMOVED = []
     ALL_WALLS = []
     CURRENT_WALLS = []
 
@@ -16,12 +18,12 @@ class Mediator:
 
                         if g_object.get_rect().colliderect(g2_object.get_rect()):
                             #print("i " + str(g_object.get_id()) + " collide with " + str(g2_object.get_id()))
-                            g_object.collision_id = str(g2_object.get_id())
-                            g_object.collision_vel = g2_object.vel.copy()
-                            Mediator.COLLISIONS.append(g_object)
+                            #g_object.collision_ids.append(str(g2_object.get_id()))
+                            #g_object.collision_vels.append(g2_object.vel.copy())
+                            #Mediator.COLLISIONS.append(g_object)
 
-                            g2_object.collision_id = str(g_object.get_id())
-                            g2_object.collision_vel = g_object.vel.copy()
+                            g2_object.collision_ids.append(str(g_object.get_id()))
+                            g2_object.collision_vels.append(g_object.vel.copy())
                             Mediator.COLLISIONS.append(g2_object)
         
     def get_walls_to_render(self, player_rect):

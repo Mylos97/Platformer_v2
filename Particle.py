@@ -3,11 +3,12 @@ from GameObject import *
 from Display import *
 
 class Particle(GameObject):
-    COLORS = {"player_bullet" : (140,255,251), "test" : (0,0,0)}
+    COLORS = {"player_bullet" : (140,255,251), "test" : (100,100,100)}
 
     def __init__(self, pos, start_vel ,type_bullet):
         super().__init__(pos)
-        self.color = Particle.COLORS[type_bullet]
+        self.color = (random.randint(90,180),random.randint(50,100),random.randint(90,180))
+        
         self.spread = 2
 
         
@@ -20,10 +21,7 @@ class Particle(GameObject):
         self.rect = pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
         self.surf_img = pygame.Surface((self.size[0],self.size[1]))
         self.surf_img.fill(self.color)
-        self.surf_img.set_alpha(180)
-
-
-
+        self.surf_img.set_alpha(random.randint(140,200))
 
     
     def loop(self, DT):
@@ -35,10 +33,10 @@ class Particle(GameObject):
         self.rect = pygame.Rect(self.pos[0], self.pos[1], self.size[0], self.size[1])
 
 
-        self.surf_img.set_alpha(180 - self.timer*7)
+        self.surf_img.set_alpha(180 - self.timer*random.randint(5,7))
 
-        if self.timer > self.life_time:
-            self.remove()
+        if self.timer > self.life_time or self.surf_img.get_alpha() == 0:
+            self.remove_particle()
         
 
     def draw(self, camera):

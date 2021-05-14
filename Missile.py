@@ -80,11 +80,12 @@ class Missile(GameObject):
 
 
     def collision(self):
-        if self.collision_id == 'enemy':
-            self.explode()
-            self.remove()
+        for collision in self.collision_ids:
 
-        
+            if collision == 'enemy':
+                self.explode()
+                self.remove()
+
         self.collision_id = 'none'
 
     def explode(self):

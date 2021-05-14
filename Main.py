@@ -19,12 +19,11 @@ class Main:
         FPS_COUNTER = 0
         player = Player([100, 100])
         camera = Camera(1024*16, 768*16)
-        cell = Cell(20, 0)
-        maze = Maze()
         Mediator.ALL_GAMEOBJECTS.append(player)
         enemy = Enemy([200, 400])
-        Mediator.ALL_GAMEOBJECTS.append(enemy)
-        Mediator.ALL_WALLS.append(cell)
+        #enemy2 = Enemy([600,400])
+        Mediator.ALL_GAMEOBJECTS.append(enemy)  
+        #Mediator.ALL_GAMEOBJECTS.append(enemy2)  
 
         while RUNNING:
             Display.SCREEN.fill((200, 200, 200))
@@ -36,15 +35,26 @@ class Main:
                 object.loop(DT)
                 object.draw(camera)
 
-            Mediator.collisions(Mediator)
 
+
+            Mediator.collisions(Mediator)
             for object in Mediator.COLLISIONS:
                 object.collision()
 
+            for particle in Mediator.PARTICLES:
+                particle.loop(DT)
+                particle.draw(camera)
+
+            #print(len(Mediator.COLLISIONS))
 
             Mediator.COLLISIONS.clear()
+            
             Mediator.ALL_GAMEOBJECTS = [object for object in Mediator.ALL_GAMEOBJECTS if object not in Mediator.TO_BE_REMOVED]
+            Mediator.PARTICLES = [p for p in Mediator.PARTICLES if p not in Mediator.PARTICLES_REMOVED]
+
+
             Mediator.TO_BE_REMOVED.clear()
+
 
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:

@@ -36,11 +36,13 @@ class Bomb(GameObject):
             Mediator.ALL_GAMEOBJECTS.append(Bullet(self.pos.copy(),bomb_angles[i].copy(),"bomb_bullet_orange"))
     
     def collision(self):
-        if self.collision_id == 'enemy':
-            self.bomb_explode()
-            self.remove()
+        for collision in self.collision_ids:
 
-        self.collision_id = 'none'
+            if collision == 'enemy':
+                self.bomb_explode()
+                self.remove()
+
+        self.collision_ids.clear()
 
 
 

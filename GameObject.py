@@ -3,6 +3,8 @@ import pygame, math
 from Display import *
 from Mediator import *
 
+
+
 class GameObject:
 
     def __init__(self, pos):
@@ -16,8 +18,8 @@ class GameObject:
         self.id = None
 
 
-        self.collision_id = 'none'
-        self.collision_vel = []
+        self.collision_ids = []
+        self.collision_vels = []
         
         self.trail_img = []
         self.trail_rect = []
@@ -27,7 +29,7 @@ class GameObject:
         self.hit_timer = 0
 
         self.hitpoints = 1
-        self.start_hitpoints = self.hitpoints
+        self.start_hitpoints = 1
 
         self.healt_bar = pygame.Rect(self.pos[0], self.pos[1], 20, 2)
         self.healt_bar_img = pygame.Surface((self.healt_bar.w,self.healt_bar.h))
@@ -52,6 +54,9 @@ class GameObject:
     
     def remove(self):
         Mediator.TO_BE_REMOVED.append(self)
+
+    def remove_particle(self):
+        Mediator.PARTICLES_REMOVED.append(self)
 
     def get_id(self):
         return self.id
@@ -122,9 +127,32 @@ class GameObject:
         self.accel[0] -= self.x_n
         self.accel[1] -= self.y_n
     
+    def shoot_towards_object(self, object):
+        x_d = self.rect.centerx - object.rect.centerx
+        y_d = self.rect.centery - object.rect.centery
+
+        distance = math.sqrt(x_d**2 + y_d**2)
+
+        x_n = x_d/distance
+        y_n = y_d/distance
+
+        return [-x_n,-y_n]
+
+
+    def follow_object_enemy(self, object):
+        self.x_d = self.rect.centerx - object.rect.centerx
+        self.y_d = self.rect.centery - object.rect.centery
+
+        self.distance = math.sqrt(math.pow(self.x_d, 2) + math.pow(self.y_d, 2))
+        self.x_n = (self.x_d/self.distance)
+        self.y_n = (self.y_d/self.distance)
+
+        self.accel[0] -= self.x_n*0.1
+        self.accel[1] -= self.y_n*0.1
+    
     def update_healhbar(self):
 
-        self.healt_bar.w = (self.hitpoints*self.start_hitpoints)/self.start_hitpoints
+        self.healt_bar.w = self.img.get_width()/2*(self.hitpoints/self.start_hitpoints)
         self.healt_bar.x = self.pos[0] + self.img.get_width() / 4
         self.healt_bar.y = self.pos[1] - 8
 
