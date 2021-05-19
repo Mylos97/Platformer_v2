@@ -24,7 +24,9 @@ class Enemy(GameObject):
         self.start_hitpoints = 100
 
         self.timer = 0
-        self.shoot_coldown = 60
+        self.shoot_coldown = 30
+
+        self.flip = True
 
 
 
@@ -54,12 +56,21 @@ class Enemy(GameObject):
             self.timer = 0
             new_pos = [self.pos[0] + self.img.get_width()/4, self.pos[1] + self.img.get_height()/4]
             dir = self.shoot_towards_object(self.target)
-            bullets = [[1,0],[0.1, - 0.5]]
-            #[dir[0]*math.cos(320) - dir[1]*math.sin(320), dir[0] * math.sin(320) + dir[1] * math.cos(320)]
-            Mediator.ALL_GAMEOBJECTS.append(Bullet(new_pos,bullets[0],"enemy_bullet"))
-            
-            Mediator.ALL_GAMEOBJECTS.append(Bullet(new_pos,bullets[1],"enemy_bullet"))
+           
+            if self.flip:
+                bullets = [[0,1],[1,0],[-1,0],[0,-1]]
+            else:
+                bullets = [[math.sqrt(2)/2,math.sqrt(2)/2],[math.sqrt(2)/2,-math.sqrt(2)/2],[-math.sqrt(2)/2,math.sqrt(2)/2],[-math.sqrt(2)/2,-math.sqrt(2)/2]]
 
+
+            for dir in bullets:
+                list = dir
+                temp_bullet = Bullet(new_pos.copy(), list.copy(),"enemy_bullet")
+
+                Mediator.ALL_GAMEOBJECTS.append(temp_bullet)
+
+            self.flip = not self.flip
+            
 
 
         if self.trail_counter > self.trail_limit:
@@ -88,8 +99,8 @@ class Enemy(GameObject):
             if collision == 'player_bullet':
                 self.hit_timer = 0
                 self.hitpoints -= 1
-                self.accel[0] += self.collision_vels[i][0]
-                self.accel[1] += self.collision_vels[i][1]
+                self.accel[0] += self.collision_vels[i][0]*0.25
+                self.accel[1] += self.collision_vels[i][1]*0.25
 
             
             if collision == 'missile':

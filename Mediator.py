@@ -3,7 +3,6 @@ class Mediator:
     TO_BE_REMOVED = []
     COLLISIONS = []
     PARTICLES = []
-    PARTICLES_REMOVED = []
     ALL_WALLS = []
     CURRENT_WALLS = []
 

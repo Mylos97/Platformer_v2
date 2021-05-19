@@ -17,7 +17,6 @@ class Missile(GameObject):
 
         self.life_time = 0
         self.img = pygame.image.load("Graphics\Missile.png")
-        self.img.set_colorkey((0,100,100))
 
         angle = math.degrees(math.atan2(-dir[1], dir[0])) + 90 
         self.roti_img = pygame.transform.rotate(self.img, angle)
@@ -26,7 +25,7 @@ class Missile(GameObject):
         
         self.target = self.find_target()
         
-
+        self.wind_speed = 1
         self.life_time = 0
         self.show_frames = 0
         self.update_speed = 0
@@ -35,8 +34,8 @@ class Missile(GameObject):
     def loop(self, DT):
         self.img.set_alpha(255- math.pow(self.life_time,1.08))
 
-        self.vel[0] = self.accel[0]
-        self.vel[1] = self.accel[1]
+        self.vel[0] = self.accel[0]*self.wind_speed
+        self.vel[1] = self.accel[1]*self.wind_speed
 
         self.pos[0] += self.vel[0]
         self.pos[1] += self.vel[1]
@@ -70,6 +69,9 @@ class Missile(GameObject):
         self.show_frames += 1
 
 
+        if random.randint(0, 3) == 5:
+            self.wind_speed -= 0.02
+            
         if self.img.get_alpha() == 0:
             self.explode()
             self.remove()

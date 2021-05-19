@@ -5,11 +5,12 @@ from Bullet import *
 from Mediator import *
 from Bomb import *
 from Missile import *
+from Camera import *
 
 class Player(GameObject):
     
-    PLAYER_RECT = pygame.Rect(0,0,0,0)
-    PLAYER_SIZE = (16,16)
+    PLAYER_HEALTH = 100
+    PLAYER_DEAD = False
     FPS_COUNTER = 0
 
     def __init__(self,pos):
@@ -25,7 +26,7 @@ class Player(GameObject):
         self.bomb_timer = 0
         self.bullet_timer = 0
         self.missile_timer = 0
-        self.missile_cooldown = 10
+        self.missile_cooldown = 30
 
     def loop(self, DT):
         Player.FPS_COUNTER += 1
@@ -42,7 +43,6 @@ class Player(GameObject):
         self.rect.x = self.pos[0]
         self.rect.y = self.pos[1]
 
-        Player.PLAYER_RECT = pygame.Rect.copy(self.rect)
 
         self.trail_counter += 1
 
@@ -55,6 +55,9 @@ class Player(GameObject):
         self.missile_timer += 1
 
         self.check_border()
+
+        if Player.PLAYER_HEALTH <= 0:
+            Player.PLAYER_DEAD = True
 
 
     def draw(self, camera):
@@ -183,6 +186,8 @@ class Player(GameObject):
             
     def collision(self):
         for collision in self.collision_ids:
-            pass
+            if collision == 'enemy_bullet' or collision == 'fast_enemy_bullet':
+                Camera.SCREEN_SHAKE = True
+                Player.PLAYER_HEALTH -= 10
         
         self.collision_ids.clear()

@@ -1,13 +1,28 @@
+from HUD import HUD
+from pygame.constants import *
 import pygame
 import sys
 from Mediator import *
 from Player import *
 from Display import *
 from Enemy import *
-from Maze import *
+from FastEnemy import *
 from Camera import *
 
 class Main:
+
+
+    def fog():
+        surf = pygame.Surface((Display.WINDOW_SIZE[0],100))
+        pygame.draw.rect(surf, (0,0,0), pygame.Rect(0,0,Display.WINDOW_SIZE[0],100))
+        surf.set_colorkey((0,0,0))
+        Display.SCREEN.blit(surf,pygame.Rect(0,0,Display.WINDOW_SIZE[0],100) , special_flags = BLEND_RGB_SUB)
+
+#        surf = pygame.Surface((radius+1, radius+1))
+#        pygame.draw.rect(surf, color, pygame.Rect(0,0,radius,radius))
+
+#        surf.set_colorkey((0,0,0))
+#        Display.SCREEN.blit(, dest)
 
     def main():
         RUNNING = True
@@ -21,14 +36,26 @@ class Main:
         camera = Camera(1024*16, 768*16)
         Mediator.ALL_GAMEOBJECTS.append(player)
         enemy = Enemy([200, 400])
-        #enemy2 = Enemy([600,400])
+        enemy2 = FastEnemy([600,400])
         Mediator.ALL_GAMEOBJECTS.append(enemy)  
-        #Mediator.ALL_GAMEOBJECTS.append(enemy2)  
+        Mediator.ALL_GAMEOBJECTS.append(enemy2)  
+
+        hud = HUD(player)
+        
+
 
         while RUNNING:
-            Display.SCREEN.fill((200, 200, 200))
+            if Player.PLAYER_DEAD == True:
+                RUNNING = False
+
+
+
+            Display.SCREEN.fill((0, 0, 0))
+
+
             camera.update_offset(player.get_rect())
-            pygame.draw.rect(Display.SCREEN, (238,238,238), camera.apply_offset(Display.PLATFORM_RECT))
+
+
             DT = CLOCK.tick(FPS)
 
             for object in Mediator.ALL_GAMEOBJECTS:
@@ -41,20 +68,23 @@ class Main:
             for object in Mediator.COLLISIONS:
                 object.collision()
 
+            i = 0
             for particle in Mediator.PARTICLES:
                 particle.loop(DT)
                 particle.draw(camera)
+                if particle.alive == False:
+                    Mediator.PARTICLES.pop(i)
+                i += 1
 
-            #print(len(Mediator.COLLISIONS))
-
+            
             Mediator.COLLISIONS.clear()
             
             Mediator.ALL_GAMEOBJECTS = [object for object in Mediator.ALL_GAMEOBJECTS if object not in Mediator.TO_BE_REMOVED]
-            Mediator.PARTICLES = [p for p in Mediator.PARTICLES if p not in Mediator.PARTICLES_REMOVED]
-
 
             Mediator.TO_BE_REMOVED.clear()
 
+            hud.update_HUD()
+            hud.draw()
 
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
@@ -62,8 +92,9 @@ class Main:
                     sys.exit()
 
             pygame.display.update()
-            
+
     
     if __name__ == "__main__":
         main()
 
+    

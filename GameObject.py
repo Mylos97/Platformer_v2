@@ -1,5 +1,7 @@
 import pygame, math
 
+from pygame import transform
+
 from Display import *
 from Mediator import *
 
@@ -8,15 +10,15 @@ from Mediator import *
 class GameObject:
 
     def __init__(self, pos):
-        self.screen = Display.SCREEN
         self.pos = pos
         self.vel = [0,0]
         self.accel = [0,0]
+        self.wind_speed = 1
+        self.apply_wind_speed = False
         self.top_speed = 3
 
         self.rect = pygame.Rect(0,0,0,0)
         self.id = None
-
 
         self.collision_ids = []
         self.collision_vels = []
@@ -26,8 +28,10 @@ class GameObject:
         self.trail_counter = 0
         self.trail_limit = 5
         self.trail_images = 7
+        
+        self.wind_speed = 1
+        
         self.hit_timer = 0
-
         self.hitpoints = 1
         self.start_hitpoints = 1
 
@@ -54,9 +58,6 @@ class GameObject:
     
     def remove(self):
         Mediator.TO_BE_REMOVED.append(self)
-
-    def remove_particle(self):
-        Mediator.PARTICLES_REMOVED.append(self)
 
     def get_id(self):
         return self.id
@@ -138,6 +139,12 @@ class GameObject:
 
         return [-x_n,-y_n]
 
+    def shoot_transform_angle(self, dir, angle):
+        
+        transformed = [-1*(dir[0]*math.cos(angle) - dir[1]*math.sin(angle)), -1*(dir[0] * math.sin(angle) + dir[1] * math.cos(angle))]
+        print(transformed)
+        return transformed
+
 
     def follow_object_enemy(self, object):
         self.x_d = self.rect.centerx - object.rect.centerx
@@ -152,15 +159,32 @@ class GameObject:
     
     def update_healhbar(self):
 
-        self.healt_bar.w = self.img.get_width()/2*(self.hitpoints/self.start_hitpoints)
-        self.healt_bar.x = self.pos[0] + self.img.get_width() / 4
-        self.healt_bar.y = self.pos[1] - 8
+        if not self.hitpoints <= 0:
+            self.healt_bar.w = self.img.get_width()/2*(self.hitpoints/self.start_hitpoints)
+            self.healt_bar.x = self.pos[0] + self.img.get_width() / 4
+            self.healt_bar.y = self.pos[1] - 8
+            self.healt_bar_img = pygame.Surface((self.healt_bar.w, self.healt_bar.h))
+            self.healt_bar_img.fill((0,255,0))
 
-        self.healt_bar_img = pygame.Surface((self.healt_bar.w, self.healt_bar.h))
-        self.healt_bar_img.fill((0,255,0))
+        else:
+            self.healt_bar.w = 1
+            self.healt_bar.x = self.pos[0] + self.img.get_width() / 4
+            self.healt_bar.y = self.pos[1] - 8
+            self.healt_bar_img = pygame.Surface((self.healt_bar.w, self.healt_bar.h))
+            self.healt_bar_img.fill((0,255,0))
 
 
 
     def draw_healtbar(self, camera): 
         self.update_healhbar()
         Display.SCREEN.blit(self.healt_bar_img, camera.apply_offset(self.healt_bar))
+
+
+    ##For lights ##    
+    def rect_surf(self, radius, color):
+        surf = pygame.Surface((radius+1, radius+1))
+        pygame.draw.rect(surf, color, pygame.Rect(0,0,radius,radius))
+
+        surf.set_colorkey((0,0,0))
+
+        return surf
