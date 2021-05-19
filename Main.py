@@ -8,6 +8,8 @@ from Display import *
 from Enemy import *
 from FastEnemy import *
 from Camera import *
+from Menu import *
+
 
 class Main:
 
@@ -41,50 +43,57 @@ class Main:
         Mediator.ALL_GAMEOBJECTS.append(enemy2)  
 
         hud = HUD(player)
-        
+        menu = Menu()
 
 
         while RUNNING:
-            if Player.PLAYER_DEAD == True:
-                RUNNING = False
+
+
+            if Menu.MENU_ON:
+                menu.loop_menu()
+
+            else:
+                if Player.PLAYER_DEAD == True:
+                    Player.PLAYER_HEALTH = 100
+                    RUNNING = Menu.MENU_ON = True
 
 
 
-            Display.SCREEN.fill((0, 0, 0))
+                Display.SCREEN.fill((0, 0, 0))
 
 
-            camera.update_offset(player.get_rect())
+                camera.update_offset(player.get_rect())
 
 
-            DT = CLOCK.tick(FPS)
+                DT = CLOCK.tick(FPS)
 
-            for object in Mediator.ALL_GAMEOBJECTS:
-                object.loop(DT)
-                object.draw(camera)
+                for object in Mediator.ALL_GAMEOBJECTS:
+                    object.loop(DT)
+                    object.draw(camera)
 
 
 
-            Mediator.collisions(Mediator)
-            for object in Mediator.COLLISIONS:
-                object.collision()
+                Mediator.collisions(Mediator)
+                for object in Mediator.COLLISIONS:
+                    object.collision()
 
-            i = 0
-            for particle in Mediator.PARTICLES:
-                particle.loop(DT)
-                particle.draw(camera)
-                if particle.alive == False:
-                    Mediator.PARTICLES.pop(i)
-                i += 1
+                i = 0
+                for particle in Mediator.PARTICLES:
+                    particle.loop(DT)
+                    particle.draw(camera)
+                    if particle.alive == False:
+                        Mediator.PARTICLES.pop(i)
+                    i += 1
 
-            
-            Mediator.COLLISIONS.clear()
-            
-            Mediator.ALL_GAMEOBJECTS = [object for object in Mediator.ALL_GAMEOBJECTS if object not in Mediator.TO_BE_REMOVED]
+                
+                Mediator.COLLISIONS.clear()
+                
+                Mediator.ALL_GAMEOBJECTS = [object for object in Mediator.ALL_GAMEOBJECTS if object not in Mediator.TO_BE_REMOVED]
 
-            Mediator.TO_BE_REMOVED.clear()
+                Mediator.TO_BE_REMOVED.clear()
 
-            hud.update_HUD()
-            hud.draw()
+                hud.update_HUD()
+                hud.draw()
 
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:

@@ -106,11 +106,20 @@ class GameObject:
             self.accel[1] = -self.top_speed
     
     def find_target(self):
-        for object in Mediator.ALL_GAMEOBJECTS:
-            if object.get_id() == 'enemy':
-                return object
+        target = 'none'
+        temp_distance = 1000000
+        distance = 1000000
         
-        return 'none'
+        for object in Mediator.ALL_GAMEOBJECTS:
+
+            if object.get_id() == 'enemy' or object.get_id() == 'fast_enemy':
+                temp_distance = math.sqrt(math.pow(self.pos[0] - object.pos[0], 2) + math.pow(self.pos[1] - object.pos[1], 2))
+
+                if temp_distance < distance:
+                    distance = temp_distance 
+                    target = object
+        
+        return target
 
     def find_player(self):
         for object in Mediator.ALL_GAMEOBJECTS:
