@@ -72,8 +72,6 @@ class Missile(GameObject):
         if random.randint(0, 3) == 5:
             self.wind_speed -= 0.02
         
-
-        print(self.target.id)
         if self.img.get_alpha() == 0:
             self.explode()
             self.remove()
@@ -86,7 +84,7 @@ class Missile(GameObject):
     def collision(self):
         for collision in self.collision_ids:
 
-            if collision == 'enemy':
+            if collision == 'enemy' or collision == 'fast_enemy':
                 self.explode()
                 self.remove()
 

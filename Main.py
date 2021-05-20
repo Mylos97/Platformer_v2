@@ -9,22 +9,9 @@ from Enemy import *
 from FastEnemy import *
 from Camera import *
 from Menu import *
-
+from Generator import *
 
 class Main:
-
-
-    def fog():
-        surf = pygame.Surface((Display.WINDOW_SIZE[0],100))
-        pygame.draw.rect(surf, (0,0,0), pygame.Rect(0,0,Display.WINDOW_SIZE[0],100))
-        surf.set_colorkey((0,0,0))
-        Display.SCREEN.blit(surf,pygame.Rect(0,0,Display.WINDOW_SIZE[0],100) , special_flags = BLEND_RGB_SUB)
-
-#        surf = pygame.Surface((radius+1, radius+1))
-#        pygame.draw.rect(surf, color, pygame.Rect(0,0,radius,radius))
-
-#        surf.set_colorkey((0,0,0))
-#        Display.SCREEN.blit(, dest)
 
     def main():
         RUNNING = True
@@ -43,6 +30,7 @@ class Main:
         Mediator.ALL_GAMEOBJECTS.append(enemy2)  
 
         hud = HUD(player)
+        generator = Generator()
         menu = Menu()
 
 
@@ -51,6 +39,8 @@ class Main:
 
             if Menu.MENU_ON:
                 menu.loop_menu()
+                DT = CLOCK.tick(FPS)
+
 
             else:
                 if Player.PLAYER_DEAD == True:
@@ -92,8 +82,11 @@ class Main:
 
                 Mediator.TO_BE_REMOVED.clear()
 
+                generator.loop()
+
                 hud.update_HUD()
                 hud.draw()
+
 
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
